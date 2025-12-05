@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meme Smash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Meme Smash</div>
+    <nav class="nav">
+      <button class="pill" data-target="onboarding">Onboard</button>
+      <button class="pill" data-target="home">Vote</button>
+      <button class="pill" data-target="leaderboard">Leaderboard</button>
+      <button class="pill" data-target="upload">Create</button>
+      <button class="pill" data-target="profile">Profile</button>
+    </nav>
+  </header>
+
+  <main id="app">
+    <section id="onboarding" class="panel">
+      <div class="panel-header">
+        <div class="eyebrow">10-second start</div>
+        <h1>Pick a name. Swipe. Done.</h1>
+      </div>
+      <div class="onboarding-grid">
+        <div class="card loud">
+          <label class="stacked">
+            <span class="label">Username</span>
+            <input id="username" type="text" placeholder="meme_beast" />
+          </label>
+          <button id="startOnboarding" class="primary">Start blitz</button>
+          <div class="tiny">No email. Anonymous until you claim the crown.</div>
+        </div>
+        <div class="card storyboard">
+          <div class="story-step">1. Swipe 5 memes fast</div>
+          <div class="story-step">2. Pick a mood badge</div>
+          <div class="story-step">3. Earn your first streak</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="home" class="panel">
+      <div class="panel-header">
+        <div class="eyebrow">1-second loop</div>
+        <h1>Swipe to crown the funniest meme.</h1>
+      </div>
+      <div class="battle">
+        <div class="meme-card" id="leftCard">
+          <div class="meme-media" id="leftImage"></div>
+          <div class="meme-meta">
+            <div class="meta-row">
+              <span class="badge">Challenger</span>
+              <span class="tiny" id="leftWinrate"></span>
+            </div>
+            <div class="meta-row">
+              <span class="label" id="leftAuthor"></span>
+              <span class="pill ghost" id="leftTier"></span>
+            </div>
+          </div>
+        </div>
+        <div class="vote-buttons">
+          <button id="voteLeft" class="danger">👎 Smash Left</button>
+          <button id="voteRight" class="success">👍 Smash Right</button>
+          <div id="feedback" class="feedback">Fast swipe = bonus XP</div>
+        </div>
+        <div class="meme-card" id="rightCard">
+          <div class="meme-media" id="rightImage"></div>
+          <div class="meme-meta">
+            <div class="meta-row">
+              <span class="badge">Challenger</span>
+              <span class="tiny" id="rightWinrate"></span>
+            </div>
+            <div class="meta-row">
+              <span class="label" id="rightAuthor"></span>
+              <span class="pill ghost" id="rightTier"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Daily streak</div>
+        <div class="progress-bar">
+          <div id="streakProgress" class="progress-fill"></div>
+        </div>
+        <div class="progress-label">Time left: <span id="streakTimer">24:00:00</span></div>
+      </div>
+    </section>
+
+    <section id="leaderboard" class="panel">
+      <div class="panel-header">
+        <div class="eyebrow">Live ranking</div>
+        <h1>Top memes of this week.</h1>
+      </div>
+      <div id="leaderboardList" class="leaderboard"></div>
+    </section>
+
+    <section id="upload" class="panel">
+      <div class="panel-header">
+        <div class="eyebrow">Self-expression</div>
+        <h1>Drop a meme or remix a template.</h1>
+      </div>
+      <div class="upload-grid">
+        <div class="card loud">
+          <label class="stacked">
+            <span class="label">Upload image</span>
+            <input type="file" id="uploadInput" accept="image/*" />
+          </label>
+          <label class="stacked">
+            <span class="label">Overlay text</span>
+            <input type="text" id="overlayText" placeholder="When the sprint actually ships" />
+          </label>
+          <button id="submitMeme" class="primary">Publish meme</button>
+          <div id="uploadStatus" class="tiny">Boost visibility with 24h turbo.</div>
+        </div>
+        <div class="card storyboard">
+          <div class="story-step">⚡ 3 preset templates ready to remix</div>
+          <div class="story-step">🎁 Referral unlocks a chaos pack</div>
+          <div class="story-step">🔥 Boost to front-page instantly</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="profile" class="panel">
+      <div class="panel-header">
+        <div class="eyebrow">Status</div>
+        <h1>Your creator aura.</h1>
+      </div>
+      <div class="profile-grid">
+        <div class="card loud">
+          <div class="stat-row">
+            <div>
+              <div class="label">Wins</div>
+              <div class="stat" id="statWins">0</div>
+            </div>
+            <div>
+              <div class="label">Upvotes</div>
+              <div class="stat" id="statUpvotes">0</div>
+            </div>
+            <div>
+              <div class="label">Streak</div>
+              <div class="stat" id="statStreak">0</div>
+            </div>
+          </div>
+          <div class="progress-bar chunky">
+            <div id="xpBar" class="progress-fill thick"></div>
+          </div>
+          <div class="tiny">Earn XP with perfect swipe speed & meme wins.</div>
+        </div>
+        <div class="card storyboard">
+          <div class="badge-grid" id="badgeGrid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
