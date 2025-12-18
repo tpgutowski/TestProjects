@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fantasy Run Map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-bar">
+      <div>
+        <p class="eyebrow">Fantasy Run Map</p>
+        <h1 class="title">See your runs carve a path through a living world.</h1>
+      </div>
+      <div class="cta-group">
+        <button class="btn primary" id="connect-btn">Connect Strava</button>
+        <button class="btn ghost" id="demo-btn">Try Demo Mode</button>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Primary">
+      <button class="tab active" data-target="map">Map</button>
+      <button class="tab" data-target="inventory">Inventory</button>
+      <button class="tab" data-target="profile">Profile</button>
+    </nav>
+
+    <main>
+      <section class="panel" id="map" aria-labelledby="map">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Trailhead · Zone: City</p>
+            <h2>Run, sync, reveal. Your avatar advances automatically.</h2>
+          </div>
+          <div class="pill">Fog-of-war enabled</div>
+        </div>
+
+        <div class="map-grid">
+          <div class="map-card">
+            <div class="map-header">
+              <div class="avatar">
+                <div class="avatar-emblem">✶</div>
+                <div>
+                  <p class="eyebrow">Wayfarer</p>
+                  <p class="avatar-name">Aster</p>
+                  <p class="meta">Silhouette: Warden · Palette: Moonwell · Emblem: Star</p>
+                </div>
+              </div>
+              <div class="progress-summary">
+                <p class="eyebrow">This week</p>
+                <p class="metric"><span id="weekly-distance">0</span> km · <span id="weekly-landmarks">0</span> landmarks</p>
+                <p class="meta">Landmark drop bias active after 10 km.</p>
+              </div>
+            </div>
+
+            <div class="map-viewport">
+              <svg viewBox="0 0 400 200" role="img" aria-label="Fantasy world path" class="map-svg">
+                <defs>
+                  <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#2DD4BF" />
+                    <stop offset="100%" stop-color="#6D5EF8" />
+                  </linearGradient>
+                </defs>
+                <path d="M20 170 C120 130 120 70 200 90 C280 110 280 40 380 60" stroke="#1F2A4D" stroke-width="14" fill="none" stroke-linecap="round" />
+                <path id="progress-path" d="M20 170 C120 130 120 70 200 90 C280 110 280 40 380 60" stroke="url(#progress-gradient)" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="0 1000" />
+                <circle id="avatar-token" cx="20" cy="170" r="11" class="avatar-token" />
+              </svg>
+              <div class="landmark-stack" id="landmark-stack"></div>
+              <div class="fog">Fog-of-war</div>
+            </div>
+
+            <div class="landmark-row" id="visible-landmarks"></div>
+
+            <div class="actions">
+              <button class="btn primary" id="simulate-run">Sync last run</button>
+              <button class="btn ghost" id="reroll-world">Regenerate demo world</button>
+            </div>
+          </div>
+
+          <aside class="map-side">
+            <div class="card">
+              <div class="card-header">
+                <p class="eyebrow">Weekly Route Cards</p>
+                <p class="meta">Choose a path; all movement counts.</p>
+              </div>
+              <div class="quest-list" id="quest-list"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <p class="eyebrow">Latest loot</p>
+                <p class="meta">Guaranteed common every landmark. Gates roll Rare+.</p>
+              </div>
+              <div class="loot-feed" id="loot-feed"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="inventory" aria-labelledby="inventory">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Inventory</p>
+            <h2>Your collectibles, sorted by most recent drops.</h2>
+          </div>
+          <div class="pill">Rarities: Common / Rare / Epic / Legendary</div>
+        </div>
+        <div class="inventory-grid" id="inventory-grid"></div>
+      </section>
+
+      <section class="panel hidden" id="profile" aria-labelledby="profile">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Profile & Settings</p>
+            <h2>Control your connection, privacy, and units.</h2>
+          </div>
+          <div class="pill success">Privacy minimal: no GPS polylines stored.</div>
+        </div>
+        <div class="settings">
+          <div class="card">
+            <div class="card-header">
+              <p class="eyebrow">Connections</p>
+              <h3>Strava</h3>
+              <p class="meta">OAuth with refresh; webhook + fallback polling. Idempotent ingest keyed by activity ID.</p>
+            </div>
+            <button class="btn primary" id="connect-cta">Connect</button>
+            <button class="btn ghost" id="resync">Manual resync</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <p class="eyebrow">Units & Privacy</p>
+              <h3>Controls</h3>
+              <p class="meta">Switch between km/mi, hide exact timestamps, and request data deletion anytime.</p>
+            </div>
+            <div class="setting-row">
+              <label for="unit-toggle">Units</label>
+              <select id="unit-toggle">
+                <option value="km">Kilometers</option>
+                <option value="mi">Miles</option>
+              </select>
+            </div>
+            <div class="setting-row">
+              <label for="privacy-toggle">Privacy</label>
+              <select id="privacy-toggle">
+                <option value="standard">Standard (no routes stored)</option>
+                <option value="stealth">Stealth (hide activity names)</option>
+              </select>
+            </div>
+            <button class="btn ghost" id="delete-account">Delete account</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <p class="eyebrow">Upgrade</p>
+              <h3>Premium cosmetics</h3>
+              <p class="meta">One-time unlock for new world themes and avatar palettes. Never pay-to-win.</p>
+            </div>
+            <button class="btn primary">Upgrade for $4.99</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="loot-modal hidden" id="loot-modal" role="dialog" aria-modal="true">
+    <div class="loot-card">
+      <div class="modal-header">
+        <p class="eyebrow">Run loot</p>
+        <h3>New activity detected</h3>
+        <p class="meta">Distance converted to map steps. Landmarks processed in order.</p>
+      </div>
+      <div class="modal-body">
+        <div class="sync-state" id="sync-state">
+          <div class="spinner"></div>
+          <p>Syncing...</p>
+        </div>
+        <div class="movement" id="movement"></div>
+        <div class="reward" id="reward"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="skip-animation">Skip</button>
+        <button class="btn primary" id="close-modal">Return to map</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
