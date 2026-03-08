@@ -3,191 +3,526 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fantasy Run Map</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <title>Fantasy Run Map — MVP Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --surface: #121a33;
+      --primary: #6d5ef8;
+      --progress: #2dd4bf;
+      --success: #22c55e;
+      --rare: #3b82f6;
+      --epic: #a855f7;
+      --legendary: #f59e0b;
+      --text: #e5e7eb;
+      --muted: #9fb0d7;
+      --border: #26345f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background: radial-gradient(circle at 20% 0, #1a2752 0, var(--bg) 42%);
+      color: var(--text);
+    }
+
+    .hidden { display: none !important; }
+    .app { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+    .card {
+      background: linear-gradient(180deg, var(--surface), #0f1730);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .btn {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      color: var(--text);
+      background: #24325d;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn.primary { background: var(--primary); }
+    .btn.ghost { background: transparent; border-color: #3a4d85; }
+
+    h1, h2, h3, p { margin: 0; }
+    .muted { color: var(--muted); }
+
+    .eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #c4cff0;
+    }
+
+    #landing {
+      display: grid;
+      gap: 20px;
+      place-items: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #landing .hero { max-width: 780px; padding: 28px; }
+
+    #landing h1 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1.15;
+      margin: 10px 0;
+    }
+
+    #appShell { display: none; gap: 14px; }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tabs { display: flex; gap: 8px; }
+
+    .tab {
+      min-height: 44px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: #0f1837;
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .tab.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary) inset;
+    }
+
+    .grid { display: grid; grid-template-columns: 1.8fr 1fr; gap: 14px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+    .mapview {
+      position: relative;
+      height: 280px;
+      border-radius: 16px;
+      background: linear-gradient(160deg, #1f2f5a, #0f1731);
+      overflow: hidden;
+      border: 1px solid #2a3b6b;
+    }
+
+    .fog {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle at 20% 75%,
+        transparent 0 35%,
+        rgba(8, 11, 25, 0.65) 55%,
+        rgba(8, 11, 25, 0.95) 100%
+      );
+    }
+
+    .token {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: var(--progress);
+      box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.2);
+    }
+
+    .landmarks { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+    .pill {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid #3a4f85;
+      background: #172449;
+      font-size: 0.85rem;
+    }
+
+    .pill.reached { border-color: var(--success); color: #b9f4c8; }
+    .loot { display: grid; gap: 8px; max-height: 240px; overflow: auto; }
+
+    .loot-item {
+      padding: 10px;
+      border-radius: 12px;
+      background: #122040;
+      border: 1px solid #2c4175;
+      font-size: 0.92rem;
+    }
+
+    .common { box-shadow: inset 0 0 0 1px #7787b0; }
+    .rare { box-shadow: inset 0 0 0 1px var(--rare); }
+    .epic { box-shadow: inset 0 0 0 1px var(--epic); }
+    .legendary { box-shadow: inset 0 0 0 1px var(--legendary); }
+
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      display: none;
+      place-items: center;
+      padding: 12px;
+    }
+
+    .modal .card { width: min(560px, 95vw); }
+
+    .stage { display: grid; gap: 10px; margin: 14px 0; min-height: 120px; }
+
+    .sparkle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--legendary), transparent 70%);
+      animation: pulse 0.8s infinite;
+    }
+
+    @keyframes pulse {
+      50% { transform: scale(1.16); opacity: 0.65; }
+    }
+
+    .settings {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    select {
+      width: 100%;
+      min-height: 44px;
+      border-radius: 10px;
+      background: #0f1734;
+      border: 1px solid #31467c;
+      color: var(--text);
+      padding: 8px;
+    }
+  </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="top-bar">
+  <section id="landing">
+    <div class="card hero">
+      <p class="eyebrow">Fantasy Run Map</p>
+      <h1>Your runs unlock a mysterious world.</h1>
+      <p class="muted" style="margin-bottom: 16px;">
+        Connect Strava, sync your latest activity, and watch your avatar move through
+        zones from City to Unknown—no manual logging, no route storage.
+      </p>
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn primary" id="connectBtn">Connect Strava</button>
+        <button class="btn ghost" id="demoBtn">Try Demo Mode</button>
+      </div>
+      <p class="muted" style="margin-top: 10px;">Time-to-fun target: under 2 minutes.</p>
+    </div>
+  </section>
+
+  <main id="appShell" class="app">
+    <div class="top card">
       <div>
-        <p class="eyebrow">Fantasy Run Map</p>
-        <h1 class="title">See your runs carve a path through a living world.</h1>
+        <p class="eyebrow">Map-first RPG fitness</p>
+        <h2>Trailhead · <span id="zoneName">City</span></h2>
       </div>
-      <div class="cta-group">
-        <button class="btn primary" id="connect-btn">Connect Strava</button>
-        <button class="btn ghost" id="demo-btn">Try Demo Mode</button>
+      <div class="tabs">
+        <button class="tab active" data-tab="map">Map</button>
+        <button class="tab" data-tab="inventory">Inventory</button>
+        <button class="tab" data-tab="profile">Profile</button>
       </div>
-    </header>
+    </div>
 
-    <nav class="tabs" aria-label="Primary">
-      <button class="tab active" data-target="map">Map</button>
-      <button class="tab" data-target="inventory">Inventory</button>
-      <button class="tab" data-target="profile">Profile</button>
-    </nav>
-
-    <main>
-      <section class="panel" id="map" aria-labelledby="map">
-        <div class="panel-header">
-          <div>
-            <p class="eyebrow">Trailhead · Zone: City</p>
-            <h2>Run, sync, reveal. Your avatar advances automatically.</h2>
-          </div>
-          <div class="pill">Fog-of-war enabled</div>
-        </div>
-
-        <div class="map-grid">
-          <div class="map-card">
-            <div class="map-header">
-              <div class="avatar">
-                <div class="avatar-emblem">✶</div>
-                <div>
-                  <p class="eyebrow">Wayfarer</p>
-                  <p class="avatar-name">Aster</p>
-                  <p class="meta">Silhouette: Warden · Palette: Moonwell · Emblem: Star</p>
-                </div>
-              </div>
-              <div class="progress-summary">
-                <p class="eyebrow">This week</p>
-                <p class="metric"><span id="weekly-distance">0</span> km · <span id="weekly-landmarks">0</span> landmarks</p>
-                <p class="meta">Landmark drop bias active after 10 km.</p>
-              </div>
+    <section id="map" class="panel">
+      <div class="grid">
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px;">
+            <div>
+              <p class="eyebrow">Current Progress</p>
+              <p class="muted">
+                <span id="distanceTotal">0</span> km traveled •
+                <span id="landmarkCount">0</span> landmarks reached
+              </p>
             </div>
-
-            <div class="map-viewport">
-              <svg viewBox="0 0 400 200" role="img" aria-label="Fantasy world path" class="map-svg">
-                <defs>
-                  <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#2DD4BF" />
-                    <stop offset="100%" stop-color="#6D5EF8" />
-                  </linearGradient>
-                </defs>
-                <path d="M20 170 C120 130 120 70 200 90 C280 110 280 40 380 60" stroke="#1F2A4D" stroke-width="14" fill="none" stroke-linecap="round" />
-                <path id="progress-path" d="M20 170 C120 130 120 70 200 90 C280 110 280 40 380 60" stroke="url(#progress-gradient)" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="0 1000" />
-                <circle id="avatar-token" cx="20" cy="170" r="11" class="avatar-token" />
-              </svg>
-              <div class="landmark-stack" id="landmark-stack"></div>
-              <div class="fog">Fog-of-war</div>
-            </div>
-
-            <div class="landmark-row" id="visible-landmarks"></div>
-
-            <div class="actions">
-              <button class="btn primary" id="simulate-run">Sync last run</button>
-              <button class="btn ghost" id="reroll-world">Regenerate demo world</button>
-            </div>
+            <span class="pill">Fog of war: On</span>
           </div>
 
-          <aside class="map-side">
-            <div class="card">
-              <div class="card-header">
-                <p class="eyebrow">Weekly Route Cards</p>
-                <p class="meta">Choose a path; all movement counts.</p>
-              </div>
-              <div class="quest-list" id="quest-list"></div>
-            </div>
-
-            <div class="card">
-              <div class="card-header">
-                <p class="eyebrow">Latest loot</p>
-                <p class="meta">Guaranteed common every landmark. Gates roll Rare+.</p>
-              </div>
-              <div class="loot-feed" id="loot-feed"></div>
-            </div>
-          </aside>
-        </div>
-      </section>
-
-      <section class="panel hidden" id="inventory" aria-labelledby="inventory">
-        <div class="panel-header">
-          <div>
-            <p class="eyebrow">Inventory</p>
-            <h2>Your collectibles, sorted by most recent drops.</h2>
+          <div class="mapview" id="mapView">
+            <svg viewBox="0 0 1000 260" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+              <path
+                d="M20 220 C200 170 260 65 410 100 C580 145 650 80 780 122 C860 150 920 60 980 82"
+                stroke="#263d70"
+                stroke-width="16"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path
+                id="progressPath"
+                d="M20 220 C200 170 260 65 410 100 C580 145 650 80 780 122 C860 150 920 60 980 82"
+                stroke="url(#g)"
+                stroke-width="16"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <defs>
+                <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+                  <stop stop-color="#2DD4BF" />
+                  <stop offset="1" stop-color="#6D5EF8" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="token" id="token"></div>
+            <div class="fog"></div>
           </div>
-          <div class="pill">Rarities: Common / Rare / Epic / Legendary</div>
-        </div>
-        <div class="inventory-grid" id="inventory-grid"></div>
-      </section>
 
-      <section class="panel hidden" id="profile" aria-labelledby="profile">
-        <div class="panel-header">
-          <div>
-            <p class="eyebrow">Profile & Settings</p>
-            <h2>Control your connection, privacy, and units.</h2>
+          <div class="landmarks" id="landmarks"></div>
+
+          <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+            <button class="btn primary" id="syncRun">Sync Last Run</button>
+            <button class="btn ghost" id="manualResync">Manual Resync</button>
           </div>
-          <div class="pill success">Privacy minimal: no GPS polylines stored.</div>
         </div>
-        <div class="settings">
+
+        <aside style="display: grid; gap: 12px;">
           <div class="card">
-            <div class="card-header">
-              <p class="eyebrow">Connections</p>
-              <h3>Strava</h3>
-              <p class="meta">OAuth with refresh; webhook + fallback polling. Idempotent ingest keyed by activity ID.</p>
-            </div>
-            <button class="btn primary" id="connect-cta">Connect</button>
-            <button class="btn ghost" id="resync">Manual resync</button>
+            <p class="eyebrow">Weekly Route Cards</p>
+            <div id="quests" style="display: grid; gap: 8px; margin-top: 10px;"></div>
           </div>
 
           <div class="card">
-            <div class="card-header">
-              <p class="eyebrow">Units & Privacy</p>
-              <h3>Controls</h3>
-              <p class="meta">Switch between km/mi, hide exact timestamps, and request data deletion anytime.</p>
-            </div>
-            <div class="setting-row">
-              <label for="unit-toggle">Units</label>
-              <select id="unit-toggle">
-                <option value="km">Kilometers</option>
-                <option value="mi">Miles</option>
-              </select>
-            </div>
-            <div class="setting-row">
-              <label for="privacy-toggle">Privacy</label>
-              <select id="privacy-toggle">
-                <option value="standard">Standard (no routes stored)</option>
-                <option value="stealth">Stealth (hide activity names)</option>
-              </select>
-            </div>
-            <button class="btn ghost" id="delete-account">Delete account</button>
+            <p class="eyebrow">Recent Loot</p>
+            <div id="lootFeed" class="loot" style="margin-top: 10px;"></div>
           </div>
-
-          <div class="card">
-            <div class="card-header">
-              <p class="eyebrow">Upgrade</p>
-              <h3>Premium cosmetics</h3>
-              <p class="meta">One-time unlock for new world themes and avatar palettes. Never pay-to-win.</p>
-            </div>
-            <button class="btn primary">Upgrade for $4.99</button>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <div class="loot-modal hidden" id="loot-modal" role="dialog" aria-modal="true">
-    <div class="loot-card">
-      <div class="modal-header">
-        <p class="eyebrow">Run loot</p>
-        <h3>New activity detected</h3>
-        <p class="meta">Distance converted to map steps. Landmarks processed in order.</p>
+        </aside>
       </div>
-      <div class="modal-body">
-        <div class="sync-state" id="sync-state">
-          <div class="spinner"></div>
-          <p>Syncing...</p>
-        </div>
-        <div class="movement" id="movement"></div>
-        <div class="reward" id="reward"></div>
+    </section>
+
+    <section id="inventory" class="panel hidden">
+      <div class="card">
+        <p class="eyebrow">Collectibles</p>
+        <h3 style="margin: 6px 0 12px;">Guaranteed common at landmarks. Gate = Rare+ bonus.</h3>
+        <div id="inventoryGrid" class="inventory-grid"></div>
       </div>
-      <div class="modal-actions">
-        <button class="btn ghost" id="skip-animation">Skip</button>
-        <button class="btn primary" id="close-modal">Return to map</button>
+    </section>
+
+    <section id="profile" class="panel hidden">
+      <div class="settings">
+        <div class="card">
+          <p class="eyebrow">Connection</p>
+          <h3>Strava OAuth</h3>
+          <p class="muted">Webhook + daily polling fallback + idempotent ingest by providerActivityId.</p>
+          <button class="btn primary" style="margin-top: 12px;">Connected</button>
+        </div>
+
+        <div class="card">
+          <p class="eyebrow">Privacy</p>
+          <h3>Minimal data storage</h3>
+          <p class="muted">No GPS polyline saved in v1. Delete account removes tokens, activities, world, inventory.</p>
+          <button class="btn ghost" style="margin-top: 12px;">Delete Account</button>
+        </div>
+
+        <div class="card">
+          <p class="eyebrow">Units & Upgrade</p>
+          <h3>Settings</h3>
+          <label class="muted" style="display: block; margin-top: 8px;">Units</label>
+          <select>
+            <option>Kilometers</option>
+            <option>Miles</option>
+          </select>
+          <button class="btn primary" style="margin-top: 12px;">Upgrade $4.99</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="lootModal">
+    <div class="card">
+      <p class="eyebrow">Run Loot</p>
+      <h3>New activity detected</h3>
+      <div class="stage" id="stage">
+        <div class="sparkle"></div>
+        <p class="muted">Syncing activity (600ms)...</p>
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="btn ghost" id="skip">Skip</button>
+        <button class="btn primary" id="closeLoot">Return to Map</button>
       </div>
     </div>
   </div>
 
-  <script src="main.js"></script>
+  <script>
+    const config = {
+      zones: ["City", "Coast", "Hills", "Mountains", "Snow", "Unknown"],
+      items: [
+        { id: "moss-coin", name: "Moss Coin", rarity: "Common", flavor: "Stamped with a forgotten crest." },
+        { id: "salt-charm", name: "Salt Charm", rarity: "Common", flavor: "Keeps sea-fog spirits away." },
+        { id: "azure-feather", name: "Azure Feather", rarity: "Rare", flavor: "From a skybird seen at dawn." },
+        { id: "violet-sigil", name: "Violet Sigil", rarity: "Epic", flavor: "Hums softly under moonlight." },
+        { id: "sunforged-key", name: "Sunforged Key", rarity: "Legendary", flavor: "Said to open the final gate." }
+      ],
+      weekly: ["Easy: Reach 3 landmarks", "Medium: Travel 18 km", "Hard: Cross a zone gate"]
+    };
+
+    const state = {
+      connected: false,
+      distance: 0,
+      landmarkIndex: 0,
+      zone: 0,
+      inventory: [],
+      selectedQuest: 0,
+      landmarks: []
+    };
+
+    const totalLandmarksPerZone = 10;
+
+    function buildWorld() {
+      const types = ["Camp", "Shrine", "Bridge", "Ruin", "Peak", "Gate"];
+      state.landmarks = Array.from({ length: totalLandmarksPerZone }, (_, i) => ({
+        name: `${types[i % 6]} ${i + 1}`,
+        type: types[i % 6]
+      }));
+      render();
+    }
+
+    function rarityClass(rarity) {
+      return rarity.toLowerCase();
+    }
+
+    function rollItem(forceRare = false) {
+      const roll = Math.random();
+      let rarity = "Common";
+      if (forceRare) {
+        rarity = roll > 0.92 ? "Legendary" : roll > 0.72 ? "Epic" : "Rare";
+      } else {
+        rarity = roll > 0.985 ? "Legendary" : roll > 0.94 ? "Epic" : roll > 0.78 ? "Rare" : "Common";
+      }
+      const pool = config.items.filter((item) => item.rarity === rarity);
+      return pool[Math.floor(Math.random() * pool.length)] || config.items[0];
+    }
+
+    function render() {
+      zoneName.textContent = config.zones[state.zone];
+      distanceTotal.textContent = state.distance.toFixed(1);
+      landmarkCount.textContent = state.landmarkIndex;
+
+      const visible = state.landmarks.slice(state.landmarkIndex, state.landmarkIndex + 4);
+      landmarks.innerHTML = visible
+        .map((landmark, idx) => `<span class="pill ${idx === 0 ? "reached" : ""}">${idx === 0 ? "Current" : "Next"}: ${landmark.name}</span>`)
+        .join("");
+
+      quests.innerHTML = config.weekly
+        .map((quest, idx) => `
+          <button class="btn ${idx === state.selectedQuest ? "primary" : "ghost"}" onclick="state.selectedQuest=${idx};render()">
+            ${quest}
+          </button>
+        `)
+        .join("");
+
+      inventoryGrid.innerHTML = state.inventory.length
+        ? state.inventory
+            .map((item) => `
+              <div class="loot-item ${rarityClass(item.rarity)}">
+                <strong>${item.name}</strong>
+                <div class="muted">${item.rarity} · ${item.source}</div>
+                <div class="muted">${item.flavor}</div>
+              </div>
+            `)
+            .join("")
+        : '<p class="muted">No items yet. Sync a run to reveal loot.</p>';
+
+      lootFeed.innerHTML = state.inventory
+        .slice(0, 8)
+        .map((item) => `
+          <div class="loot-item ${rarityClass(item.rarity)}">
+            <strong>${item.name}</strong>
+            <div class="muted">${item.rarity}</div>
+          </div>
+        `)
+        .join("") || '<p class="muted">Your latest drops will appear here.</p>';
+
+      const progress = Math.min(
+        1,
+        (state.zone * totalLandmarksPerZone + state.landmarkIndex) /
+        (config.zones.length * totalLandmarksPerZone)
+      );
+
+      progressPath.style.strokeDasharray = `${progress * 1800} 2000`;
+      token.style.left = `calc(${progress * 100}% - 10px)`;
+      token.style.top = `${220 - progress * 130}px`;
+    }
+
+    function start() {
+      landing.style.display = "none";
+      appShell.style.display = "grid";
+      buildWorld();
+    }
+
+    connectBtn.onclick = () => {
+      state.connected = true;
+      start();
+    };
+
+    demoBtn.onclick = start;
+
+    document.querySelectorAll(".tab").forEach((tabBtn) => {
+      tabBtn.onclick = () => {
+        document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"));
+        tabBtn.classList.add("active");
+        document.querySelectorAll(".panel").forEach((panel) => panel.classList.add("hidden"));
+        document.getElementById(tabBtn.dataset.tab).classList.remove("hidden");
+      };
+    });
+
+    function runSync() {
+      lootModal.style.display = "grid";
+      const distance = Math.random() * 8 + 3;
+      state.distance += distance;
+      const crossed = Math.max(1, Math.floor(distance / 2.4));
+
+      stage.innerHTML = '<div class="sparkle"></div><p class="muted">Syncing activity (600ms)...</p>';
+
+      setTimeout(() => {
+        let log = `<p>You traveled <strong>${distance.toFixed(1)} km</strong> and crossed <strong>${crossed}</strong> landmark(s).</p>`;
+
+        for (let i = 0; i < crossed; i += 1) {
+          const landmark = state.landmarks[state.landmarkIndex];
+          if (!landmark) break;
+
+          state.landmarkIndex += 1;
+          const item = rollItem(landmark.type === "Gate");
+          state.inventory.unshift({ ...item, source: landmark.name });
+          log += `<p>Reached ${landmark.name}: found <strong>${item.name}</strong> (${item.rarity}).</p>`;
+
+          if (state.landmarkIndex >= totalLandmarksPerZone) {
+            state.zone = Math.min(state.zone + 1, config.zones.length - 1);
+            state.landmarkIndex = 0;
+          }
+        }
+
+        stage.innerHTML = log;
+        render();
+      }, 600);
+    }
+
+    syncRun.onclick = runSync;
+    manualResync.onclick = runSync;
+    closeLoot.onclick = () => { lootModal.style.display = "none"; };
+    skip.onclick = () => { lootModal.style.display = "none"; };
+  </script>
 </body>
 </html>
