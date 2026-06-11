@@ -3,161 +3,213 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kernel — The Operating System for Pharma Data</title>
+    <title>Kernel — Report reviewed</title>
     <meta
       name="description"
-      content="Kernel is the reconciliation layer for pharmaceutical data. It runs in your cloud, detects conflicts with AI agents, and keeps every change explainable and auditable."
+      content="Kernel report review screen showing evidence that supports a missed conflict report and a recommended correction for human approval."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="site-header">
-      <div class="container nav-wrap">
-        <a class="wordmark" href="#">Kernel</a>
-        <nav aria-label="Primary navigation">
-          <ul class="nav-list">
-            <li><a href="#product">Product</a></li>
-            <li><a href="#why-kernel">Why Kernel</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Kernel workspace navigation">
+        <a class="brand" href="#" aria-label="Kernel home">
+          <span class="brand-mark">K</span>
+          <span>Kernel</span>
+        </a>
+
+        <nav class="side-nav" aria-label="Primary navigation">
+          <a href="#">Queue</a>
+          <a class="active" href="#" aria-current="page">Missed conflicts</a>
+          <a href="#">Evidence library</a>
+          <a href="#">Rules</a>
+          <a href="#">Audit log</a>
         </nav>
-      </div>
-    </header>
 
-    <main>
-      <section class="hero section">
-        <div class="container hero-grid">
+        <div class="workspace-card">
+          <span>Workspace</span>
+          <strong>Commercial Data Quality</strong>
+        </div>
+      </aside>
+
+      <div class="page-shell">
+        <header class="topbar">
           <div>
-            <p class="eyebrow">AI operating system for pharmaceutical data</p>
-            <h1>The operating system for pharma data.</h1>
-            <p class="lead">
-              Kernel reconciles fragmented pharmaceutical data across vendors,
-              clouds, and internal systems — with AI agents, human review, and
-              full auditability.
-            </p>
-            <p class="tagline">
-              “Because your AI insights are only as good as your data.”
-            </p>
-            <div class="button-row">
-              <a class="button button-primary" href="#contact">Request Demo</a>
-              <a class="button button-secondary" href="#product"
-                >See How It Works</a
-              >
+            <p class="breadcrumb">Queue / Missed conflicts / MC-7F3A2</p>
+            <h1>Report reviewed</h1>
+          </div>
+          <div class="topbar-actions" aria-label="User and workflow controls">
+            <button class="icon-button" type="button" aria-label="View audit trail">⌘</button>
+            <button class="avatar-button" type="button">AS</button>
+          </div>
+        </header>
+
+        <main class="review-page">
+          <section class="review-hero" aria-labelledby="review-status-title">
+            <div class="status-tracker" aria-label="Review status tracker">
+              <ol>
+                <li>
+                  <span class="step-dot" aria-hidden="true"></span>
+                  <span>Report submitted</span>
+                </li>
+                <li>
+                  <span class="step-dot" aria-hidden="true"></span>
+                  <span>Relevant records retrieved</span>
+                </li>
+                <li>
+                  <span class="step-dot" aria-hidden="true"></span>
+                  <span>Kernel evaluated the evidence</span>
+                </li>
+                <li>
+                  <span class="step-dot" aria-hidden="true"></span>
+                  <span>Recommendation ready</span>
+                </li>
+              </ol>
             </div>
+
+            <div class="hero-copy">
+              <span class="status-pill">Review complete</span>
+              <p class="eyebrow">Missed conflict report</p>
+              <h2 id="review-status-title">Kernel found evidence supporting your report</h2>
+              <p class="hero-subtext">
+                Kernel replayed the relevant data and found evidence that supports the
+                issue you reported. Review the recommendation below.
+              </p>
+            </div>
+          </section>
+
+          <div class="content-grid">
+            <section class="panel recommendation-panel" aria-labelledby="recommendation-title">
+              <div class="section-heading">
+                <div>
+                  <p class="section-kicker">Kernel recommendation</p>
+                  <h3 id="recommendation-title">Update the primary affiliation</h3>
+                </div>
+                <span class="confidence-badge">High confidence</span>
+              </div>
+
+              <dl class="recommendation-details">
+                <div>
+                  <dt>Missed conflict ID</dt>
+                  <dd>MC-7F3A2</dd>
+                </div>
+                <div>
+                  <dt>Issue type</dt>
+                  <dd>Missing conflict</dd>
+                </div>
+                <div class="wide">
+                  <dt>Doctor / account / NPI</dt>
+                  <dd>Harper E. Singh, MD · NPI 1000000095</dd>
+                </div>
+                <div>
+                  <dt>Field affected</dt>
+                  <dd>Primary affiliation / HCO</dd>
+                </div>
+                <div>
+                  <dt>Confidence</dt>
+                  <dd>High</dd>
+                </div>
+              </dl>
+
+              <div class="value-comparison" aria-label="Recommended value comparison">
+                <article>
+                  <span>Current value in Kernel</span>
+                  <strong>NewYork-Presbyterian / Weill Cornell</strong>
+                </article>
+                <div class="arrow" aria-hidden="true">→</div>
+                <article class="recommended-value">
+                  <span>Recommended corrected value</span>
+                  <strong>Astoria Dermatology</strong>
+                </article>
+              </div>
+
+              <div class="rationale-box">
+                <span>Rationale</span>
+                <p>
+                  Rx activity and CRM records point to Astoria Dermatology as the
+                  active primary site, while the Cornell affiliation appears stale or
+                  secondary.
+                </p>
+              </div>
+            </section>
+
+            <aside class="panel next-panel" aria-labelledby="next-title">
+              <p class="section-kicker">What happens next</p>
+              <h3 id="next-title">Choose the resolution path</h3>
+              <p>
+                Kernel believes this report is supported by the data. You can accept
+                this recommendation or route it for human review.
+              </p>
+              <div class="decision-note">
+                <strong>No writeback yet</strong>
+                <span>The underlying HCP/HCO data will remain unchanged until you choose an action.</span>
+              </div>
+            </aside>
           </div>
-          <aside class="mockup" aria-label="Kernel reconciliation workflow preview">
-            <p class="mockup-title">Reconciliation Pipeline</p>
-            <ol>
-              <li><span>Sources</span><strong>IQVIA · CRM · Komodo · Symphony</strong></li>
-              <li><span>Detection</span><strong>Agent flags HCP/HCO conflicts</strong></li>
-              <li><span>Review</span><strong>Evidence and rationale generated</strong></li>
-              <li><span>Approval</span><strong>Human validates before writeback</strong></li>
-            </ol>
-            <p class="mockup-note">Explainable changes, complete audit trail.</p>
-          </aside>
-        </div>
-      </section>
 
-      <section class="section" id="product">
-        <div class="container copy-block">
-          <h2>Pharma data is fragmented by design.</h2>
-          <p>
-            Teams buy data from multiple vendors. Internal systems evolve in
-            parallel. Records for providers, organizations, affiliations, and
-            activity rarely match cleanly.
-          </p>
-          <p>
-            The result: expensive manual reconciliation that delays analytics,
-            reporting, and field execution.
-          </p>
-        </div>
-      </section>
+          <section class="panel evidence-panel" aria-labelledby="evidence-title">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Evidence used</p>
+                <h3 id="evidence-title">Records Kernel reviewed</h3>
+              </div>
+              <span class="record-count">5 evidence items</span>
+            </div>
 
-      <section class="section section-muted">
-        <div class="container copy-block">
-          <h2>Why existing approaches fail.</h2>
-          <ul class="bullet-list">
-            <li><strong>Dashboards</strong> display problems — they do not resolve them.</li>
-            <li><strong>Warehouses</strong> store problems — they do not reconcile them.</li>
-            <li><strong>Centralization projects</strong> are slow and often unrealistic.</li>
-            <li><strong>Source systems</strong> will never fully agree on their own.</li>
-          </ul>
-        </div>
-      </section>
+            <div class="evidence-list">
+              <article class="evidence-item">
+                <div>
+                  <h4>Rx activity pattern</h4>
+                  <p>Most recent Rx activity points to the Astoria site.</p>
+                </div>
+                <span>RX-0095-APR</span>
+              </article>
+              <article class="evidence-item">
+                <div>
+                  <h4>CRM export row</h4>
+                  <p>CRM lists Astoria Dermatology as the active practice.</p>
+                </div>
+                <span>CRM-ROW-412</span>
+              </article>
+              <article class="evidence-item">
+                <div>
+                  <h4>Primary affiliation source</h4>
+                  <p>Source record supports Astoria as the active HCO.</p>
+                </div>
+                <span>AFF-0095</span>
+              </article>
+              <article class="evidence-item">
+                <div>
+                  <h4>Address match</h4>
+                  <p>Address aligns with Astoria Dermatology profile.</p>
+                </div>
+                <span>ADDR-11182</span>
+              </article>
+              <article class="evidence-item">
+                <div>
+                  <h4>User attachment</h4>
+                  <p>Uploaded screenshot supports the reported issue.</p>
+                </div>
+                <span>ATT-7F3A2</span>
+              </article>
+            </div>
+          </section>
 
-      <section class="section">
-        <div class="container copy-block">
-          <h2>What Kernel is.</h2>
-          <p>
-            Kernel is the reconciliation layer across your existing data
-            ecosystem.
-          </p>
-          <ul class="bullet-list">
-            <li>Runs inside your cloud.</li>
-            <li>Connects to data where it already lives.</li>
-            <li>Detects conflicts and proposes fixes with AI agents.</li>
-            <li>Keeps humans in the loop for verification.</li>
-            <li>Maintains explainability and audit logs for every change.</li>
-          </ul>
-          <p class="sub-line">
-            Kernel keeps pharmaceutical data consistent, explainable, and
-            trustworthy — no matter where it lives.
-          </p>
-        </div>
-      </section>
-
-      <section class="section section-muted" id="why-kernel">
-        <div class="container">
-          <h2>Why Kernel is different.</h2>
-          <div class="card-grid">
-            <article class="card">
-              <h3>Decentralized</h3>
-              <p>
-                No forced migration. Kernel works across your current stack,
-                including Snowflake, Databricks, CRM, and vendor feeds.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Explainable</h3>
-              <p>
-                Every recommendation includes evidence, logic, and provenance.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Human-verified</h3>
-              <p>
-                Review-first workflows build trust, with safe automation over
-                time.
-              </p>
-            </article>
-            <article class="card">
-              <h3>Pharma-native</h3>
-              <p>
-                Built for HCP/HCO identities, affiliations, and commercial data
-                realities.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section cta" id="contact">
-        <div class="container cta-box">
-          <h2>
-            Kernel helps pharma teams spend less time fixing data and more time
-            using it.
-          </h2>
-          <a class="button button-primary" href="mailto:hello@kernel.ai"
-            >Request Demo</a
-          >
-        </div>
-      </section>
-    </main>
+          <footer class="action-bar" aria-label="Resolution actions">
+            <a class="back-link" href="#">Back to queue</a>
+            <div class="button-row">
+              <button class="button secondary" type="button">Send to human review</button>
+              <button class="button primary" type="button">Accept recommendation</button>
+            </div>
+          </footer>
+        </main>
+      </div>
+    </div>
   </body>
 </html>
