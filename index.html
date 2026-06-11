@@ -6,12 +6,12 @@
     <title>Kernel — Report reviewed</title>
     <meta
       name="description"
-      content="Kernel report review screen showing evidence that supports a missed conflict report and a recommended correction for human approval."
+      content="Kernel report review screen for missed conflicts that could not be verified from available pharmaceutical data."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -20,196 +20,81 @@
     <div class="app-shell">
       <aside class="sidebar" aria-label="Kernel workspace navigation">
         <a class="brand" href="#" aria-label="Kernel home">
-          <span class="brand-mark">K</span>
+          <span class="brand-mark" aria-hidden="true">K</span>
           <span>Kernel</span>
         </a>
 
         <nav class="side-nav" aria-label="Primary navigation">
           <a href="#">Queue</a>
-          <a class="active" href="#" aria-current="page">Missed conflicts</a>
-          <a href="#">Evidence library</a>
-          <a href="#">Rules</a>
-          <a href="#">Audit log</a>
+          <a href="#" class="is-active">Reports</a>
+          <a href="#">Conflicts</a>
+          <a href="#">Sources</a>
         </nav>
-
-        <div class="workspace-card">
-          <span>Workspace</span>
-          <strong>Commercial Data Quality</strong>
-        </div>
       </aside>
 
-      <div class="page-shell">
+      <main class="main-panel">
         <header class="topbar">
           <div>
-            <p class="breadcrumb">Queue / Missed conflicts / MC-7F3A2</p>
+            <p class="breadcrumb">Missed conflicts / Report KNL-4821</p>
             <h1>Report reviewed</h1>
           </div>
-          <div class="topbar-actions" aria-label="User and workflow controls">
-            <button class="icon-button" type="button" aria-label="View audit trail">⌘</button>
-            <button class="avatar-button" type="button">AS</button>
-          </div>
+          <span class="status-chip">Unverified</span>
         </header>
 
-        <main class="review-page">
-          <section class="review-hero" aria-labelledby="review-status-title">
-            <div class="status-tracker" aria-label="Review status tracker">
-              <ol>
-                <li>
-                  <span class="step-dot" aria-hidden="true"></span>
-                  <span>Report submitted</span>
-                </li>
-                <li>
-                  <span class="step-dot" aria-hidden="true"></span>
-                  <span>Relevant records retrieved</span>
-                </li>
-                <li>
-                  <span class="step-dot" aria-hidden="true"></span>
-                  <span>Kernel evaluated the evidence</span>
-                </li>
-                <li>
-                  <span class="step-dot" aria-hidden="true"></span>
-                  <span>Recommendation ready</span>
-                </li>
-              </ol>
-            </div>
+        <section class="review-card" aria-labelledby="status-title">
+          <div class="hero-copy">
+            <p class="eyebrow">Review complete</p>
+            <h2 id="status-title">Kernel could not verify this issue</h2>
+            <p class="lead">
+              Kernel checked the relevant data but did not find enough evidence
+              to confirm the report. No data has been changed.
+            </p>
+          </div>
 
-            <div class="hero-copy">
-              <span class="status-pill">Review complete</span>
-              <p class="eyebrow">Missed conflict report</p>
-              <h2 id="review-status-title">Kernel found evidence supporting your report</h2>
-              <p class="hero-subtext">
-                Kernel replayed the relevant data and found evidence that supports the
-                issue you reported. Review the recommendation below.
+          <div class="summary-alert" role="status">
+            <div class="alert-icon" aria-hidden="true">!</div>
+            <div>
+              <h3>Kernel could not verify this issue</h3>
+              <p>
+                This is not a rejection. The evidence was incomplete, unclear,
+                or contradictory.
               </p>
             </div>
-          </section>
+          </div>
 
           <div class="content-grid">
-            <section class="panel recommendation-panel" aria-labelledby="recommendation-title">
-              <div class="section-heading">
-                <div>
-                  <p class="section-kicker">Kernel recommendation</p>
-                  <h3 id="recommendation-title">Update the primary affiliation</h3>
-                </div>
-                <span class="confidence-badge">High confidence</span>
-              </div>
-
-              <dl class="recommendation-details">
-                <div>
-                  <dt>Missed conflict ID</dt>
-                  <dd>MC-7F3A2</dd>
-                </div>
-                <div>
-                  <dt>Issue type</dt>
-                  <dd>Missing conflict</dd>
-                </div>
-                <div class="wide">
-                  <dt>Doctor / account / NPI</dt>
-                  <dd>Harper E. Singh, MD · NPI 1000000095</dd>
-                </div>
-                <div>
-                  <dt>Field affected</dt>
-                  <dd>Primary affiliation / HCO</dd>
-                </div>
-                <div>
-                  <dt>Confidence</dt>
-                  <dd>High</dd>
-                </div>
-              </dl>
-
-              <div class="value-comparison" aria-label="Recommended value comparison">
-                <article>
-                  <span>Current value in Kernel</span>
-                  <strong>NewYork-Presbyterian / Weill Cornell</strong>
-                </article>
-                <div class="arrow" aria-hidden="true">→</div>
-                <article class="recommended-value">
-                  <span>Recommended corrected value</span>
-                  <strong>Astoria Dermatology</strong>
-                </article>
-              </div>
-
-              <div class="rationale-box">
-                <span>Rationale</span>
-                <p>
-                  Rx activity and CRM records point to Astoria Dermatology as the
-                  active primary site, while the Cornell affiliation appears stale or
-                  secondary.
-                </p>
+            <section class="section-block" aria-labelledby="checked-title">
+              <p class="section-label" id="checked-title">What Kernel checked</p>
+              <div class="pill-list" aria-label="Data checked by Kernel">
+                <span class="pill">Physician records</span>
+                <span class="pill">Affiliation records</span>
+                <span class="pill">CRM activity</span>
+                <span class="pill">Rx data</span>
+                <span class="pill">Source files</span>
+                <span class="pill">Attachments</span>
               </div>
             </section>
 
-            <aside class="panel next-panel" aria-labelledby="next-title">
-              <p class="section-kicker">What happens next</p>
-              <h3 id="next-title">Choose the resolution path</h3>
-              <p>
-                Kernel believes this report is supported by the data. You can accept
-                this recommendation or route it for human review.
-              </p>
-              <div class="decision-note">
-                <strong>No writeback yet</strong>
-                <span>The underlying HCP/HCO data will remain unchanged until you choose an action.</span>
-              </div>
-            </aside>
+            <section class="section-block" aria-labelledby="why-title">
+              <p class="section-label" id="why-title">Why Kernel could not verify it</p>
+              <ul class="reason-list">
+                <li>No matching affiliation record was found.</li>
+                <li>Source records were incomplete or contradictory.</li>
+              </ul>
+            </section>
           </div>
 
-          <section class="panel evidence-panel" aria-labelledby="evidence-title">
-            <div class="section-heading">
-              <div>
-                <p class="section-kicker">Evidence used</p>
-                <h3 id="evidence-title">Records Kernel reviewed</h3>
-              </div>
-              <span class="record-count">5 evidence items</span>
-            </div>
-
-            <div class="evidence-list">
-              <article class="evidence-item">
-                <div>
-                  <h4>Rx activity pattern</h4>
-                  <p>Most recent Rx activity points to the Astoria site.</p>
-                </div>
-                <span>RX-0095-APR</span>
-              </article>
-              <article class="evidence-item">
-                <div>
-                  <h4>CRM export row</h4>
-                  <p>CRM lists Astoria Dermatology as the active practice.</p>
-                </div>
-                <span>CRM-ROW-412</span>
-              </article>
-              <article class="evidence-item">
-                <div>
-                  <h4>Primary affiliation source</h4>
-                  <p>Source record supports Astoria as the active HCO.</p>
-                </div>
-                <span>AFF-0095</span>
-              </article>
-              <article class="evidence-item">
-                <div>
-                  <h4>Address match</h4>
-                  <p>Address aligns with Astoria Dermatology profile.</p>
-                </div>
-                <span>ADDR-11182</span>
-              </article>
-              <article class="evidence-item">
-                <div>
-                  <h4>User attachment</h4>
-                  <p>Uploaded screenshot supports the reported issue.</p>
-                </div>
-                <span>ATT-7F3A2</span>
-              </article>
+          <section class="next-step" aria-labelledby="next-title">
+            <p class="section-label" id="next-title">What you can do next</p>
+            <p>You can add more detail and try again, or resolve the issue manually.</p>
+            <div class="actions" aria-label="Report actions">
+              <a class="button button-primary" href="#">Add more detail</a>
+              <a class="button button-secondary" href="#">Resolve manually</a>
+              <a class="back-link" href="#">Back to queue</a>
             </div>
           </section>
-
-          <footer class="action-bar" aria-label="Resolution actions">
-            <a class="back-link" href="#">Back to queue</a>
-            <div class="button-row">
-              <button class="button secondary" type="button">Send to human review</button>
-              <button class="button primary" type="button">Accept recommendation</button>
-            </div>
-          </footer>
-        </main>
-      </div>
+        </section>
+      </main>
     </div>
   </body>
 </html>
